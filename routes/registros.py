@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Body
 from models.registro import Registro, RegistroUpdate
 from database import registros_collection
+from bson import ObjectId
 
 router = APIRouter()
 
@@ -39,23 +40,34 @@ def obtener_registros_persona(cedula: str):
 
     return {"registros": registros}
 
-# # Actualizar caminata
-# @router.put("/caminatas/{nombre}")
-# def actualizar_caminata(nombre: str, datos_actualizados: CaminataUpadate):
-#     actualizacion = {k: v for k, v in datos_actualizados.dict().items() if v is not None}
-#     if not actualizacion:
-#         raise HTTPException(status_code=400, detail="No se proporcionaron campos a actualizar")
+# Obtener registros de una caminata por id
+@router.get("/registros/caminata/{caminata_id}")
+def obtener_registros_caminata(caminata_id: str):
+    try:
+        object_id = ObjectId(caminata_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="ID de caminata no válido")
 
-#     resultado = caminatas_collection.update_one({"nombre": nombre}, {"$set": actualizacion})
-#     if resultado.matched_count == 0:
-#         raise HTTPException(status_code=404, detail="Caminata no encontrada")
+    registros_cursor = registros_collection.find({"caminata_id": object_id})
+    registros = [Registro(**registro) for registro in registros_cursor]
 
-#     return {"mensaje": "Caminata actualizada"}
+    if not registros:
+        raise HTTPException(status_code=404, detail="No se encontraron registros para esta caminata")
 
-# # Eliminar caminata
-# @router.delete("/caminatas/{nombre}")
-# def eliminar_caminata(nombre: str):
-#     resultado = caminatas_collection.delete_one({"nombre": nombre})
-#     if resultado.deleted_count == 0:
-#         raise HTTPException(status_code=400, detail="Caminata no encontrada")
-#     return {"mensaje": "Caminata eliminada"}
+    return {"registros": registros}
+
+
+# Eliminar registro
+@router.delete("/registros/{registro_id}")
+def eliminar_registro(registro_id: str):
+    try:
+        object_id = ObjectId(registro_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="ID de registro no válido")
+    
+    resultado = registros_collection.delete_one({"_id": object_id})
+
+    if resultado.deleted_count == 0:
+        raise HTTPException(status_code=400, detail="Registro no encontrada")
+    
+    return {"mensaje": "Registro eliminado"}

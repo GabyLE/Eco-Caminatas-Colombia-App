@@ -1,17 +1,36 @@
+from bson import ObjectId
+from bson.errors import InvalidId
 from pydantic import BaseModel, Field
 from typing import Optional
-from models.common import PyObjectId
-from bson import ObjectId
 
+
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v, *args):
+        try:
+            return cls(v)
+        except InvalidId:
+            raise ValueError(f"{v} is not a valid ObjectId")
+
+    @classmethod
+    def __get_pydantic_json_schema__(self, cls, field_schema):
+        return {"type": "string"}
+
+
+# El modelo Caminata con la configuración actualizada
 class Caminata(BaseModel):
     id: Optional[PyObjectId] = Field(default=None, alias="_id")
     nombre: str
     kilometros: float
     duracion: str
 
-    class Config:  # esta clase interna configura validaciones y serialización
-        validate_by_name = True  # permite usar 'id' en lugar de '_id'
-        arbitrary_types_allowed = True         # permite usar tipos como ObjectId
+    class Config:
+        validate_by_name = True  # Permite usar 'id' en lugar de '_id'
+        arbitrary_types_allowed = True  # Permite tipos personalizados como PyObjectId
         json_encoders = {
-            ObjectId: str                      # convierte ObjectId a string en respuestas JSON
+            ObjectId: str  # Convierte automáticamente los ObjectId a str en la serialización
         }

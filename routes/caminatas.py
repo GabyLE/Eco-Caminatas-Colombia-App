@@ -22,20 +22,24 @@ def crear_caminata(caminata: Caminata = Body(...)):
     # Retornar un mensaje y el _id de la caminata creada
     return {"mensaje": "Caminata creada exitosamente", "id": str(result.inserted_id)}
 
-# # Obtener lista personas
-# @router.get("/personas")
-# def obtener_personas():
-#     personas = list(personas_collection.find())
-#     return {"personas": personas}
+# Obtener lista de caminatas
+@router.get("/caminatas")
+def obtener_caminatas():
+    caminatas = list(caminatas_collection.find())  # Obtener las caminatas desde la base de datos
+    
+     # Convertir cada documento de MongoDB a un objeto Caminata, ignorando valores None
+    caminatas_list = [Caminata(**{k: v for k, v in caminata.items() if v is not None}) for caminata in caminatas]
+    
+    return {"caminatas": caminatas_list}
 
-# # Obtener persona por cédula
-# @router.get("/personas/{cedula}")
-# def obtener_persona(cedula: str):
-#     persona = personas_collection.find_one({"_id": cedula})
-#     if not persona:
-#         raise HTTPException(status_code=404, detail="Persona no encontrada")
-#     persona["_id"] = str(persona["_id"])
-#     return persona
+# #Obtener caminata por nombre
+@router.get("/caminata/{nombre}")
+def obtener_caminata(nombre: str):
+    caminata = caminatas_collection.find_one({"nombre": nombre})
+    if caminata:
+        return Caminata(**caminata)
+    else:
+        raise HTTPException(status_code=404, detail="Caminata no encontrada")
 
 # # Actualizar persona
 # @router.put("/personas/{cedula}")

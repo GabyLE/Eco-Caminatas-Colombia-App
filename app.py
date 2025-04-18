@@ -10,4 +10,4 @@ async def root():
 
 app.include_router(personas.router)
 app.include_router(caminatas.router)
-#app.include_router(registros.router)
+app.include_router(registros.router)

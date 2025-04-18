@@ -18,24 +18,26 @@ def crear_registro(registro: Registro = Body(...)): # body = {fecha_realizacion:
     # Retornar un mensaje y el _id del registro creado
     return {"mensaje": "Registro añadido exitosamente", "id": str(result.inserted_id)}
 
-# # Obtener lista de caminatas
-# @router.get("/caminatas")
-# def obtener_caminatas():
-#     caminatas = list(caminatas_collection.find())  # Obtener las caminatas desde la base de datos
+# Obtener lista de registros
+@router.get("/registros")
+def obtener_registros():
+    registros = list(registros_collection.find())  # Obtener los registros desde la base de datos
     
-#      # Convertir cada documento de MongoDB a un objeto Caminata, ignorando valores None
-#     caminatas_list = [Caminata(**{k: v for k, v in caminata.items() if v is not None}) for caminata in caminatas]
+     # Convertir cada documento de MongoDB a un objeto Registro, ignorando valores None
+    registros_list = [Registro(**{k: v for k, v in registro.items() if v is not None}) for registro in registros]
     
-#     return {"caminatas": caminatas_list}
+    return {"registros": registros_list}
 
-# # #Obtener caminata por nombre
-# @router.get("/caminatas/{nombre}")
-# def obtener_caminata(nombre: str):
-#     caminata = caminatas_collection.find_one({"nombre": nombre})
-#     if caminata:
-#         return Caminata(**caminata)
-#     else:
-#         raise HTTPException(status_code=404, detail="Caminata no encontrada")
+# #Obtener registros de una persona por cédula
+@router.get("/registros/persona/{cedula}")
+def obtener_registros_persona(cedula: str):
+    registros_cursor = registros_collection.find({"asistentes": cedula})
+    registros = [Registro(**registro) for registro in registros_cursor]
+
+    if not registros:
+        raise HTTPException(status_code=404, detail="No se encontraron registros para esta cédula")
+
+    return {"registros": registros}
 
 # # Actualizar caminata
 # @router.put("/caminatas/{nombre}")

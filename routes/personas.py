@@ -51,10 +51,10 @@ def actualizar_persona(cedula: str, datos_actualizados: PersonaUpdate):
 
     return {"mensaje": "Persona actualizada"}
 
-# # Eliminar persona
-# @router.delete("/personas/{cedula}")
-# def eliminar_persona(cedula: str):
-#     resultado = personas_collection.delete_one({"cedula": cedula})
-#     if resultado.deleted_count == 0:
-#         raise HTTPException(status_code=400, detail="Persona no encontrada")
-#     return {"mensaje": "Persona eliminada"}
+# Eliminar persona
+@router.delete("/personas/{cedula}")
+def eliminar_persona(cedula: str):
+    resultado = personas_collection.delete_one({"_id": cedula})
+    if resultado.deleted_count == 0:
+        raise HTTPException(status_code=400, detail="Persona no encontrada")
+    return {"mensaje": "Persona eliminada"}

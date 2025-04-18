@@ -54,10 +54,10 @@ def actualizar_caminata(nombre: str, datos_actualizados: CaminataUpadate):
 
     return {"mensaje": "Caminata actualizada"}
 
-# # Eliminar persona
-# @router.delete("/personas/{cedula}")
-# def eliminar_persona(cedula: str):
-#     resultado = personas_collection.delete_one({"_id": cedula})
-#     if resultado.deleted_count == 0:
-#         raise HTTPException(status_code=400, detail="Persona no encontrada")
-#     return {"mensaje": "Persona eliminada"}
+# Eliminar caminata
+@router.delete("/caminatas/{nombre}")
+def eliminar_caminata(nombre: str):
+    resultado = caminatas_collection.delete_one({"nombre": nombre})
+    if resultado.deleted_count == 0:
+        raise HTTPException(status_code=400, detail="Caminata no encontrada")
+    return {"mensaje": "Caminata eliminada"}

@@ -38,16 +38,18 @@ def obtener_persona(cedula: str):
     persona["_id"] = str(persona["_id"])
     return persona
 
-# # Actualizar celular persona
-# @router.put("/personas/{cedula}")
-# def actualizar_celular(cedula: str, nuevos_datos: dict = Body(...)):
-#     resultado = personas_collection.update_one(
-#         {"cedula": cedula},
-#         {"$set": nuevos_datos}
-#     )
-#     if resultado.matched_count == 0:
-#         raise HTTPException(status_code=404, detail="Persona no encontrada")
-#     return {"mensaje": "Persona actualizada"}
+# Actualizar persona
+@router.put("/personas/{cedula}")
+def actualizar_persona(cedula: str, datos_actualizados: PersonaUpdate):
+    actualizacion = {k: v for k, v in datos_actualizados.dict().items() if v is not None}
+    if not actualizacion:
+        raise HTTPException(status_code=400, detail="No se proporcionaron campos a actualizar")
+
+    resultado = personas_collection.update_one({"_id": cedula}, {"$set": actualizacion})
+    if resultado.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Persona no encontrada")
+
+    return {"mensaje": "Persona actualizada"}
 
 # # Eliminar persona
 # @router.delete("/personas/{cedula}")

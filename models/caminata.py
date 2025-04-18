@@ -21,7 +21,7 @@ class PyObjectId(ObjectId):
         return {"type": "string"}
 
 
-# El modelo Caminata con la configuración actualizada
+# El modelo Caminata
 class Caminata(BaseModel):
     id: Optional[PyObjectId] = Field(default=None, alias="_id")
     nombre: str
@@ -34,3 +34,8 @@ class Caminata(BaseModel):
         json_encoders = {
             ObjectId: str  # Convierte automáticamente los ObjectId a str en la serialización
         }
+
+class CaminataUpadate(BaseModel):
+    nombre: Optional[str]
+    kilometros: Optional[float]
+    duracion: Optional[str]

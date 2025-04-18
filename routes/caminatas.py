@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Body
-from models.caminata import Caminata
+from models.caminata import Caminata, CaminataUpadate
 from database import caminatas_collection
 
 router = APIRouter()
@@ -33,7 +33,7 @@ def obtener_caminatas():
     return {"caminatas": caminatas_list}
 
 # #Obtener caminata por nombre
-@router.get("/caminata/{nombre}")
+@router.get("/caminatas/{nombre}")
 def obtener_caminata(nombre: str):
     caminata = caminatas_collection.find_one({"nombre": nombre})
     if caminata:
@@ -41,18 +41,18 @@ def obtener_caminata(nombre: str):
     else:
         raise HTTPException(status_code=404, detail="Caminata no encontrada")
 
-# # Actualizar persona
-# @router.put("/personas/{cedula}")
-# def actualizar_persona(cedula: str, datos_actualizados: PersonaUpdate):
-#     actualizacion = {k: v for k, v in datos_actualizados.dict().items() if v is not None}
-#     if not actualizacion:
-#         raise HTTPException(status_code=400, detail="No se proporcionaron campos a actualizar")
+# Actualizar caminata
+@router.put("/caminatas/{nombre}")
+def actualizar_caminata(nombre: str, datos_actualizados: CaminataUpadate):
+    actualizacion = {k: v for k, v in datos_actualizados.dict().items() if v is not None}
+    if not actualizacion:
+        raise HTTPException(status_code=400, detail="No se proporcionaron campos a actualizar")
 
-#     resultado = personas_collection.update_one({"_id": cedula}, {"$set": actualizacion})
-#     if resultado.matched_count == 0:
-#         raise HTTPException(status_code=404, detail="Persona no encontrada")
+    resultado = caminatas_collection.update_one({"nombre": nombre}, {"$set": actualizacion})
+    if resultado.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Caminata no encontrada")
 
-#     return {"mensaje": "Persona actualizada"}
+    return {"mensaje": "Caminata actualizada"}
 
 # # Eliminar persona
 # @router.delete("/personas/{cedula}")

@@ -1,7 +1,7 @@
 import sys
-from utils import solicitar_datos_persona, mostrar_menu
+from utils import solicitar_datos_persona, mostrar_menu, solicitar_datos_caminata
 from actions.persona import añadir_persona, editar_persona, eliminar_persona, listar_personas, obtener_persona, buscar_persona
-#from actions.caminata import añadir_caminata, editar_caminata, eliminar_caminata, ver_caminata
+from actions.caminata import añadir_caminata, editar_caminata, eliminar_caminata, listar_caminatas
 #from actions.registro import añadir_registro, editar_registro, eliminar_registro, ver_registro
 
 def acciones_persona():
@@ -74,7 +74,7 @@ def acciones_persona():
                 
         elif opcion == "4":
             listar_personas()
-            
+
         elif opcion == "5":
             while True:
                 nombre = input("Ingrese el nombre de la persona que quiere buscar: ")
@@ -104,13 +104,21 @@ def acciones_caminata():
         opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
-            añadir_caminata()
+            while True:
+                nombre, kilometros, duracion = solicitar_datos_caminata()
+                print("Los datos están correctos?")
+                sel = input("1. Sí \n2. No\n")
+
+                if sel == "1":
+                    añadir_caminata(nombre, kilometros, duracion)
+                    break
+                
         elif opcion == "2":
             editar_caminata()
         elif opcion == "3":
             eliminar_caminata()
         elif opcion == "4":
-            ver_caminata()
+            listar_caminatas()
         elif opcion == "5":
             break  # Vuelve al menú principal
         else:

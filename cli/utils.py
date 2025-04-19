@@ -34,6 +34,18 @@ def solicitar_datos_persona():
 
     return (nombre, cedula, celular, correo, nombre_contemer, celular_contemer)
 
+def solicitar_datos_caminata():
+    nombre = input("Ingrese el nombre de la caminata: ")
+    kilometros = input(f"Ingrese los kilómetros de la ruta {nombre}: ")
+    duracion = input(f"Ingrese la duración de la ruta {nombre}: ")
+    
+    print(f"Los datos están correctos?" 
+      f"\n Nombre: {nombre}" 
+      f"\n Cédula: {kilometros}" 
+      f"\n Celular: {duracion}")
+
+    return (nombre, kilometros, duracion)
+
 
 def mostrar_menu():
     print("Seleccione una opción:")

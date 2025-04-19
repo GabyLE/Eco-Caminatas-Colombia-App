@@ -16,7 +16,7 @@ def acciones_persona():
         opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
-            # Llamar a la función para añadir persona
+            
             while True:
                 nombre, cedula, celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona()
                 print("Los datos están correctos?")
@@ -29,24 +29,48 @@ def acciones_persona():
         elif opcion == "2":
             while True:
                 cedula = input("Ingrese la cédula de la persona que va a actualizar: ")
-                obtener_persona(cedula)
-                print("Es la persona correcta?")
+                encontrada = obtener_persona(cedula)
+
+                if not encontrada:
+                    repetir = input("¿Deseas intentar con otra cédula? (s/n): ")
+                    if repetir.lower() != "s":
+                        break
+                    continue
+
+                print("¿Es la persona correcta?")
                 sel = input("1. Sí \n2. No\n")
 
                 if sel == "1":
                     while True:
-                        nombre, cedula, celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona()
-                        print("Los datos están correctos?")
+                        nombre, cedula_nueva, celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona()
+                        print("¿Los datos están correctos?")
                         sel = input("1. Sí \n2. No\n")
 
                         if sel == "1":
-                            editar_persona(cedula, nombre, celular, correo, nombre_contemer, celular_contemer)  # Llama a la función de editar persona
+                            editar_persona(cedula, nombre, celular, correo, nombre_contemer, celular_contemer)
                             break
                 break
-            
-            #editar_persona()
+
         elif opcion == "3":
-            eliminar_persona()
+             while True:
+                cedula = input("Ingrese la cédula de la persona que va a eliminar: ")
+                encontrada = obtener_persona(cedula)
+
+                if not encontrada:
+                    repetir = input("¿Deseas intentar con otra cédula? (s/n): ")
+                    if repetir.lower() != "s":
+                        break
+                    continue
+
+                print("¿Es la persona correcta?")
+                sel = input("1. Sí \n2. No\n")
+
+                if sel == "1":
+                    eliminar_persona(cedula)
+                    break
+                break
+                
+                
         elif opcion == "4":
             listar_personas()
         elif opcion == "5":

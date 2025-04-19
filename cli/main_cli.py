@@ -1,6 +1,6 @@
 import sys
 from utils import solicitar_datos_persona, mostrar_menu
-from actions.persona import añadir_persona, editar_persona, eliminar_persona, listar_personas, obtener_persona
+from actions.persona import añadir_persona, editar_persona, eliminar_persona, listar_personas, obtener_persona, buscar_persona
 #from actions.caminata import añadir_caminata, editar_caminata, eliminar_caminata, ver_caminata
 #from actions.registro import añadir_registro, editar_registro, eliminar_registro, ver_registro
 
@@ -11,7 +11,8 @@ def acciones_persona():
         print("2. Editar Senderista")
         print("3. Eliminar Senderista")
         print("4. Ver listado de Senderistas")
-        print("5. Volver al menú principal")
+        print("5. Buscar Senderista (por nombre)")
+        print("6. Volver al menú principal")
         
         opcion = input("Seleccione una opción: ")
         
@@ -74,6 +75,8 @@ def acciones_persona():
         elif opcion == "4":
             listar_personas()
         elif opcion == "5":
+            buscar_persona()
+        elif opcion == "6":
             break  # Vuelve al menú principal
         else:
             print("Opción no válida. Inténtelo de nuevo.")

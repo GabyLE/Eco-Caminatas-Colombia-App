@@ -1,4 +1,5 @@
 import re
+from tabulate import tabulate
 
 def validar_cedula(cedula):
     # Verifica que la cédula solo tenga números y tenga una longitud específica
@@ -40,3 +41,24 @@ def mostrar_menu():
     print("2. Caminata")
     print("3. Registro")
     print("4. Salir")
+
+def imprimir_personas_tabla(datos):
+    personas = datos.get("personas", [])
+    if not personas:
+        print("No hay personas registradas.")
+        return
+
+    tabla = []
+    for p in personas:
+        tabla.append([
+            p["_id"],
+            p["nombre_completo"],
+            p["celular"],
+            p["correo"],
+            p["contacto_emergencia"]["nombre"],
+            p["contacto_emergencia"]["celular"],
+            len(p["caminatas_asistidads"])
+        ])
+
+    headers = ["Cédula", "Nombre", "Celular", "Correo", "Contacto Emergencia", "Celular CE", "# Caminatas"]
+    print(tabulate(tabla, headers=headers, tablefmt="grid"))

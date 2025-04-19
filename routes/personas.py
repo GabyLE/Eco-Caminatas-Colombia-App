@@ -27,6 +27,8 @@ def crear_persona(persona: Persona = Body(...)):
 @router.get("/personas")
 def obtener_personas():
     personas = list(personas_collection.find())
+    if not personas:
+        raise HTTPException(status_code=404, detail="No se encontraron personas.")
     return {"personas": personas}
 
 # Obtener persona por cédula

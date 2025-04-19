@@ -1,4 +1,5 @@
 import requests
+from utils import imprimir_personas_tabla
 
 def añadir_persona(cedula, nombre, celular, correo, nombre_contemer, celular_contemer):
     try:
@@ -84,4 +85,18 @@ def eliminar_persona(cedula):
         print(f"Error de conexión con el servidor: {e}")
 
 def listar_personas():
+    try:
+        response = requests.get("http://127.0.0.1:8000/personas")
+        if response.status_code == 200:
+            datos = response.json()
+            imprimir_personas_tabla(datos)
+
+        elif response.status_code == 404:
+            print(f"{response.json().get('detail')}")
+        else:
+            print(f"Error inesperado ({response.status_code}): {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error de conexión con el servidor: {e}")
+
+def buscar_persona():
     return

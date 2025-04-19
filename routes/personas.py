@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Body
+from fastapi import APIRouter, HTTPException, Body, Query
 from models.persona import Persona, PersonaUpdate
 from database import personas_collection
 
@@ -37,7 +37,7 @@ def obtener_persona(cedula: str):
     persona = personas_collection.find_one({"_id": cedula})
     if not persona:
         raise HTTPException(status_code=404, detail="Persona no encontrada")
-    persona["_id"] = str(persona["_id"])
+
     return persona
 
 # Actualizar persona
@@ -60,3 +60,15 @@ def eliminar_persona(cedula: str):
     if resultado.deleted_count == 0:
         raise HTTPException(status_code=400, detail="Persona no encontrada")
     return {"mensaje": "Persona eliminada"}
+
+# Buscar personas por nombre (coincidencias parciales)
+@router.get("/personas/buscar/")
+def buscar_personas(nombre: str = Query(..., description="Nombre a buscar")):
+    coincidencias = list(personas_collection.find({
+        "nombre_completo": {"$regex": nombre, "$options": "i"}
+    }))
+    
+    if not coincidencias:
+        raise HTTPException(status_code=404, detail="No se encontraron personas con ese nombre")
+    
+    return {"personas": coincidencias}

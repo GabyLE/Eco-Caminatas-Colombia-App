@@ -74,8 +74,19 @@ def acciones_persona():
                 
         elif opcion == "4":
             listar_personas()
+            
         elif opcion == "5":
-            buscar_persona()
+            while True:
+                nombre = input("Ingrese el nombre de la persona que quiere buscar: ")
+                nombre = nombre.replace(" ", "%20")
+                encontrada = buscar_persona(nombre)
+
+                if not encontrada:
+                    repetir = input("¿Deseas intentar con otro nombre? (s/n): ")
+                    if repetir.lower() != "s":
+                        break
+                    continue
+
         elif opcion == "6":
             break  # Vuelve al menú principal
         else:

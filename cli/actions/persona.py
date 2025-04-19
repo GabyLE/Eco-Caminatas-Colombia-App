@@ -98,5 +98,17 @@ def listar_personas():
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con el servidor: {e}")
 
-def buscar_persona():
+def buscar_persona(nombre):
+    try:
+        response = requests.get("http://127.0.0.1:8000/personas/buscar/?nombre=" + nombre)
+        if response.status_code == 200:
+            datos = response.json()
+            imprimir_personas_tabla(datos)
+
+        elif response.status_code == 404:
+            print(f"{response.json().get('detail')}")
+        else:
+            print(f"Error inesperado ({response.status_code}): {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error de conexión con el servidor: {e}")
     return

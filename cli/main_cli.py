@@ -1,14 +1,8 @@
 import sys
-from actions.persona import añadir_persona, editar_persona, eliminar_persona, listar_personas
+from utils import solicitar_datos_persona, mostrar_menu
+from actions.persona import añadir_persona, editar_persona, eliminar_persona, listar_personas, obtener_persona
 #from actions.caminata import añadir_caminata, editar_caminata, eliminar_caminata, ver_caminata
 #from actions.registro import añadir_registro, editar_registro, eliminar_registro, ver_registro
-
-def mostrar_menu():
-    print("Seleccione una opción:")
-    print("1. Senderista")
-    print("2. Caminata")
-    print("3. Registro")
-    print("4. Salir")
 
 def acciones_persona():
     while True:
@@ -22,18 +16,35 @@ def acciones_persona():
         opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
-        # Llamar a la función para añadir persona
-            nombre = input("Ingrese el nombre de la persona: ")
-            cedula = input(f"Ingrese la cédula de {nombre}: ")
-            celular = input(f"Ingrese el celular de {nombre}: ")
-            correo = input(f"Ingrese el correo electrónico de {nombre}: ")
-            nombre_contemer = input(f"Ingrese el nombre del contacto de emergencia de {nombre}: ")
-            celular_contemer = input(f"Ingrese el celular del contacto de emergencia de {nombre}")
-            
-            añadir_persona(cedula, nombre, celular, correo, nombre_contemer, celular_contemer)  # Llama a la función de añadir persona
-        
+            # Llamar a la función para añadir persona
+            while True:
+                nombre, cedula, celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona()
+                print("Los datos están correctos?")
+                sel = input("1. Sí \n2. No\n")
+
+                if sel == "1":
+                    añadir_persona(cedula, nombre, celular, correo, nombre_contemer, celular_contemer)  # Llama a la función de añadir persona
+                    break
+
         elif opcion == "2":
-                editar_persona()
+            while True:
+                cedula = input("Ingrese la cédula de la persona que va a actualizar: ")
+                obtener_persona(cedula)
+                print("Es la persona correcta?")
+                sel = input("1. Sí \n2. No\n")
+
+                if sel == "1":
+                    while True:
+                        nombre, cedula, celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona()
+                        print("Los datos están correctos?")
+                        sel = input("1. Sí \n2. No\n")
+
+                        if sel == "1":
+                            editar_persona(cedula, nombre, celular, correo, nombre_contemer, celular_contemer)  # Llama a la función de editar persona
+                            break
+                break
+            
+            #editar_persona()
         elif opcion == "3":
             eliminar_persona()
         elif opcion == "4":

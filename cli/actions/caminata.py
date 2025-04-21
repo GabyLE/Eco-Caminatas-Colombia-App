@@ -88,4 +88,15 @@ def eliminar_caminata(nombre):
         print(f"Error de conexión con el servidor: {e}")
 
 def listar_caminatas():
-    return
+    try:
+        response = requests.get("http://127.0.0.1:8000/caminatas")
+        if response.status_code == 200:
+            datos = response.json()
+            imprimir_caminatas_tabla(datos)
+
+        elif response.status_code == 404:
+            print(f"{response.json().get('detail')}")
+        else:
+            print(f"Error inesperado ({response.status_code}): {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error de conexión con el servidor: {e}")

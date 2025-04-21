@@ -99,7 +99,8 @@ def acciones_caminata():
         print("2. Editar Caminata")
         print("3. Eliminar Caminata")
         print("4. Ver listado de Caminatas")
-        print("5. Volver al menú principal")
+        print("5. Buscar caminata por nombre (COINCIDENCIA PARCIAL)")
+        print("6. Volver al menú principal")
         
         opcion = input("Seleccione una opción: ")
         
@@ -161,6 +162,17 @@ def acciones_caminata():
         elif opcion == "4":
             listar_caminatas()
         elif opcion == "5":
+            while True:
+                nombre = input("Ingrese el nombre de la caminata que quiere buscar: ")
+                nombre = nombre.replace(" ", "%20")
+                encontrada = buscar_caminata(nombre)
+
+                if not encontrada:
+                    repetir = input("¿Deseas intentar con otro nombre? (s/n): ")
+                    if repetir.lower() != "s":
+                        break
+                    continue
+        elif opcion == "6":
             break  # Vuelve al menú principal
         else:
             print("Opción no válida. Inténtelo de nuevo.")

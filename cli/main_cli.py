@@ -1,7 +1,7 @@
 import sys
 from utils import solicitar_datos_persona, mostrar_menu, solicitar_datos_caminata
 from actions.persona import añadir_persona, editar_persona, eliminar_persona, listar_personas, obtener_persona, buscar_persona
-from actions.caminata import añadir_caminata, editar_caminata, eliminar_caminata, listar_caminatas
+from actions.caminata import añadir_caminata, editar_caminata, eliminar_caminata, listar_caminatas, buscar_caminata, obtener_caminata
 #from actions.registro import añadir_registro, editar_registro, eliminar_registro, ver_registro
 
 def acciones_persona():
@@ -19,7 +19,7 @@ def acciones_persona():
         if opcion == "1":
             
             while True:
-                nombre, cedula, celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona()
+                nombre, cedula, celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona(metodo="crear")
                 print("Los datos están correctos?")
                 sel = input("1. Sí \n2. No\n")
 
@@ -43,7 +43,7 @@ def acciones_persona():
 
                 if sel == "1":
                     while True:
-                        nombre, cedula_nueva, celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona()
+                        nombre,celular, correo, nombre_contemer, celular_contemer = solicitar_datos_persona(metodo="actualizar")
                         print("¿Los datos están correctos?")
                         sel = input("1. Sí \n2. No\n")
 
@@ -112,9 +112,33 @@ def acciones_caminata():
                 if sel == "1":
                     añadir_caminata(nombre, kilometros, duracion)
                     break
-                
+
         elif opcion == "2":
-            editar_caminata()
+            while True:
+                nombre = input("Ingrese el nombre EXACTO de la caminata que quiere actualizar: ")
+                nombre = nombre.replace(" ", "%20")
+                encontrada = obtener_caminata(nombre)
+
+                if not encontrada:
+                    repetir = input("¿Deseas intentar con otro nombre? (s/n): ")
+                    if repetir.lower() != "s":
+                        break
+                    continue
+
+                print("¿Es la caminata correcta?")
+                sel = input("1. Sí \n2. No\n")
+
+                if sel == "1":
+                    while True:
+                        nombre_nuevo, kilometros, duracion = solicitar_datos_caminata()
+                        print("¿Los datos están correctos?")
+                        sel = input("1. Sí \n2. No\n")
+
+                        if sel == "1":
+                            editar_caminata(nombre, nombre_nuevo, kilometros, duracion)
+                            break
+                break
+
         elif opcion == "3":
             eliminar_caminata()
         elif opcion == "4":

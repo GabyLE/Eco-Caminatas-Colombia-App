@@ -16,23 +16,40 @@ def validar_nombre(nombre):
         print("El nombre no puede estar vacío.")
         return False
     
-def solicitar_datos_persona():
-    nombre = input("Ingrese el nombre de la persona: ")
-    cedula = input(f"Ingrese la cédula de {nombre}: ")
-    celular = input(f"Ingrese el celular de {nombre}: ")
-    correo = input(f"Ingrese el correo electrónico de {nombre}: ")
-    nombre_contemer = input(f"Ingrese el nombre del contacto de emergencia de {nombre}: ")
-    celular_contemer = input(f"Ingrese el celular del contacto de emergencia de {nombre}: ")
-    
-    print(f"Los datos están correctos?" 
-      f"\n Nombre: {nombre}" 
-      f"\n Cédula: {cedula}" 
-      f"\n Celular: {celular}" 
-      f"\n Correo: {correo}" 
-      f"\n Nombre contacto de emergencia: {nombre_contemer}" 
-      f"\n Celular contacto de emergencia: {celular_contemer}")
+def solicitar_datos_persona(metodo="crear"):
+    if metodo == "crear":
+        nombre = input("Ingrese el nombre de la persona: ")
+        cedula = input(f"Ingrese la cédula de {nombre}: ")
+        celular = input(f"Ingrese el celular de {nombre}: ")
+        correo = input(f"Ingrese el correo electrónico de {nombre}: ")
+        nombre_contemer = input(f"Ingrese el nombre del contacto de emergencia de {nombre}: ")
+        celular_contemer = input(f"Ingrese el celular del contacto de emergencia de {nombre}: ")
+        
+        print(f"Los datos están correctos?" 
+        f"\n Nombre: {nombre}" 
+        f"\n Cédula: {cedula}" 
+        f"\n Celular: {celular}" 
+        f"\n Correo: {correo}" 
+        f"\n Nombre contacto de emergencia: {nombre_contemer}" 
+        f"\n Celular contacto de emergencia: {celular_contemer}")
 
-    return (nombre, cedula, celular, correo, nombre_contemer, celular_contemer)
+        return (nombre, cedula, celular, correo, nombre_contemer, celular_contemer)
+    
+    elif metodo == "actualizar":
+        nombre = input("Ingrese el nombre de la persona: ")
+        celular = input(f"Ingrese el celular de {nombre}: ")
+        correo = input(f"Ingrese el correo electrónico de {nombre}: ")
+        nombre_contemer = input(f"Ingrese el nombre del contacto de emergencia de {nombre}: ")
+        celular_contemer = input(f"Ingrese el celular del contacto de emergencia de {nombre}: ")
+        
+        print(f"Los datos están correctos?" 
+        f"\n Nombre: {nombre}" 
+        f"\n Celular: {celular}" 
+        f"\n Correo: {correo}" 
+        f"\n Nombre contacto de emergencia: {nombre_contemer}" 
+        f"\n Celular contacto de emergencia: {celular_contemer}")
+
+        return (nombre, celular, correo, nombre_contemer, celular_contemer)
 
 def solicitar_datos_caminata():
     nombre = input("Ingrese el nombre de la caminata: ")
@@ -41,8 +58,8 @@ def solicitar_datos_caminata():
     
     print(f"Los datos están correctos?" 
       f"\n Nombre: {nombre}" 
-      f"\n Cédula: {kilometros}" 
-      f"\n Celular: {duracion}")
+      f"\n Kilómetros: {kilometros}" 
+      f"\n Duración: {duracion}")
 
     return (nombre, kilometros, duracion)
 
@@ -73,4 +90,21 @@ def imprimir_personas_tabla(datos):
         ])
 
     headers = ["Cédula", "Nombre", "Celular", "Correo", "Contacto Emergencia", "Celular CE", "# Caminatas"]
+    print(tabulate(tabla, headers=headers, tablefmt="grid"))
+
+def imprimir_caminatas_tabla(datos):
+    caminatas = datos.get("caminatas", [])
+    if not caminatas:
+        print("No hay caminatas registradas.")
+        return
+
+    tabla = []
+    for c in caminatas:
+        tabla.append([
+            c["nombre"],
+            c["kilometros"],
+            c["duracion"]
+        ])
+
+    headers = ["Nombre", "Km", "Duración"]
     print(tabulate(tabla, headers=headers, tablefmt="grid"))

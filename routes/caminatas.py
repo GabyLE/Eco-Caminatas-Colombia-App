@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Body
+from fastapi import APIRouter, HTTPException, Body, Query
 from models.caminata import Caminata, CaminataUpadate
 from database import caminatas_collection
 
@@ -40,6 +40,22 @@ def obtener_caminata(nombre: str):
         return Caminata(**caminata)
     else:
         raise HTTPException(status_code=404, detail="Caminata no encontrada")
+    
+# Buscar caminata por nombre (coincidencias parciales)
+@router.get("/caminatas/buscar/")
+def buscar_caminatas(nombre: str = Query(..., description="Nombre a buscar")):
+    coincidencias = list(caminatas_collection.find({
+        "nombre": {"$regex": nombre, "$options": "i"}
+    }))
+    
+    if not coincidencias:
+        raise HTTPException(status_code=404, detail="No se encontraron caminatas con ese nombre")
+    
+    # Convertir ObjectId a string
+    for caminata in coincidencias:
+        caminata["_id"] = str(caminata["_id"])
+
+    return {"caminatas": coincidencias}
 
 # Actualizar caminata
 @router.put("/caminatas/{nombre}")

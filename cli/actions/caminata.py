@@ -75,8 +75,17 @@ def editar_caminata(nombre,nombre_nuevo, kilometros, duracion):
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con el servidor: {e}")
 
-def eliminar_caminata():
-    return
+def eliminar_caminata(nombre):
+    try:
+        response = requests.delete("http://127.0.0.1:8000/caminatas/" + nombre)
+        if response.status_code == 200:
+            print("Caminata eliminada con éxito.")
+        elif response.status_code == 400:
+            print(f"Error de validación: {response.json().get('detail')}")
+        else:
+            print(f"Error inesperado ({response.status_code}): {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error de conexión con el servidor: {e}")
 
 def listar_caminatas():
     return

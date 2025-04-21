@@ -115,7 +115,7 @@ def acciones_caminata():
 
         elif opcion == "2":
             while True:
-                nombre = input("Ingrese el nombre EXACTO de la caminata que quiere actualizar: ")
+                nombre = input("Ingrese el nombre EXACTO de la caminata que quiere ACTUALIZAR: ")
                 nombre = nombre.replace(" ", "%20")
                 encontrada = obtener_caminata(nombre)
 
@@ -140,7 +140,24 @@ def acciones_caminata():
                 break
 
         elif opcion == "3":
-            eliminar_caminata()
+            while True:
+                nombre = input("Ingrese el nombre EXACTO de la caminata que quiere ELIMINAR: ")
+                nombre = nombre.replace(" ", "%20")
+                encontrada = obtener_caminata(nombre)
+
+                if not encontrada:
+                    repetir = input("¿Deseas intentar con otro nombre? (s/n): ")
+                    if repetir.lower() != "s":
+                        break
+                    continue
+
+                print("¿Es la caminata correcta?")
+                sel = input("1. Sí \n2. No\n")
+
+                if sel == "1":
+                    eliminar_caminata(nombre)
+                    break
+                
         elif opcion == "4":
             listar_caminatas()
         elif opcion == "5":
